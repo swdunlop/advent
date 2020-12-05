@@ -2,12 +2,7 @@ package main
 
 import (
 	"advent"
-	"bytes"
 	"fmt"
-	"io/ioutil"
-	"path/filepath"
-	"strconv"
-	"strings"
 )
 
 func main() {
@@ -56,21 +51,4 @@ func load(file string) (input []int, table map[int]struct{}, err error) {
 		table[n] = struct{}{}
 	}
 	return
-}
-
-func readInputIntegers(path ...string) []int {
-	data, err := ioutil.ReadFile(filepath.Join(path...))
-	if err != nil {
-		panic(err)
-	}
-	data = bytes.TrimSuffix(data, []byte("\n"))
-	lines := strings.Split(string(data), "\n")
-	input := make([]int, len(lines))
-	for i, line := range lines {
-		input[i], err = strconv.Atoi(line)
-		if err != nil {
-			panic(fmt.Errorf("%w while parsing %q", err, line))
-		}
-	}
-	return input
 }
