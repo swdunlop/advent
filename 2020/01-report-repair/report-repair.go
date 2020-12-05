@@ -1,6 +1,7 @@
 package main
 
 import (
+	"advent"
 	"bytes"
 	"fmt"
 	"io/ioutil"
@@ -10,37 +11,52 @@ import (
 )
 
 func main() {
-	input := readInputIntegers("2020", "01-report-repair", "input.txt")
-	table := make(map[int]struct{}, len(input))
+	solution, err := solve2(`input.txt`)
+	advent.ExitOnErr(err)
+	fmt.Println(solution)
+}
+
+func solve2(file string) (int, error) {
+	input, table, err := load(file)
+	if err != nil {
+		return 0, err
+	}
+	for i, n := range input {
+		for _, m := range input[i:] {
+			d := 2020 - n - m
+			if _, ok := table[d]; ok {
+				return n * m * d, nil
+			}
+		}
+	}
+	return 0, fmt.Errorf(`no solution found in %q`, file)
+
+}
+
+func solve1(file string) (int, error) {
+	input, table, err := load(file)
+	if err != nil {
+		return 0, err
+	}
+	for _, n := range input {
+		d := 2020 - n
+		if _, ok := table[d]; ok {
+			return n * d, nil
+		}
+	}
+	return 0, fmt.Errorf(`no solution found in %q`, file)
+}
+
+func load(file string) (input []int, table map[int]struct{}, err error) {
+	input, err = advent.ReadInts(file)
+	if err != nil {
+		return
+	}
+	table = make(map[int]struct{}, len(input))
 	for _, n := range input {
 		table[n] = struct{}{}
 	}
-
-	part2(input, table)
-}
-
-func part2(input []int, table map[int]struct{}) {
-	for i, n := range input {
-		for j, m := range input[i:] {
-			for _, o := range input[j:] {
-				if m+n+o == 2020 {
-					fmt.Printf("%v * %v * %v = %v", m, n, o, m*n*o)
-					return
-				}
-			}
-		}
-	}
-}
-
-func part1(input []int, table map[int]struct{}) {
-	for i, n := range input {
-		for _, m := range input[i:] {
-			if m+n == 2020 {
-				fmt.Printf("%v * %v = %v", m, n, m*n)
-				return
-			}
-		}
-	}
+	return
 }
 
 func readInputIntegers(path ...string) []int {
