@@ -1,0 +1,18 @@
+[package]
+name = "advent"
+version = "0.1.0"
+authors = ["Scott W. Dunlop <swdunlop@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+
+[lib]
+name = "advent"
+path = "advent.rs"
+
+[[bin]]
+name = "2020-01-report-repair"
+path = "2020/01-report-repair/report-repair.rs"
+
