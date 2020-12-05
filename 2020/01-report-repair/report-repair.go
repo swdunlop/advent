@@ -30,7 +30,6 @@ func solve2(file string) (int, error) {
 		}
 	}
 	return 0, fmt.Errorf(`no solution found in %q`, file)
-
 }
 
 func solve1(file string) (int, error) {
