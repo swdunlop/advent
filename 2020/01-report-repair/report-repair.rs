@@ -1,5 +1,6 @@
 use std::collections::HashSet;
 use std::fs;
+use std::iter::FromIterator;
 use std::path;
 
 fn main() {
@@ -7,10 +8,11 @@ fn main() {
 }
 
 fn solve1() {
-    let input: HashSet<i32> = load_integer_set("2020/01-report-repair/input.txt");
+    let input = load_integers("2020/01-report-repair/input.txt");
+    let table: HashSet<&i32> = HashSet::from_iter(&input);
     for entry in &input {
         let other = 2020 - entry;
-        if input.contains(&other) {
+        if table.contains(&other) {
             println!("{}", other * entry);
             return;
         }
@@ -18,11 +20,12 @@ fn solve1() {
 }
 
 fn solve2() {
-    let input: HashSet<i32> = load_integer_set("2020/01-report-repair/input.txt");
-    for entry1 in &input {
-        for entry2 in &input {
+    let input = load_integers("2020/01-report-repair/input.txt");
+    let table: HashSet<&i32> = HashSet::from_iter(&input);
+    for (skip, entry1) in input.iter().enumerate() {
+        for entry2 in input[skip..].iter() {
             let entry3 = 2020 - entry1 - entry2;
-            if input.contains(&entry3) {
+            if table.contains(&entry3) {
                 println!("{}", entry3 * entry1 * entry2);
                 return;
             }
@@ -30,7 +33,7 @@ fn solve2() {
     }
 }
 
-fn load_integer_set<P: AsRef<path::Path>>(path: P) -> HashSet<i32> {
+fn load_integers<P: AsRef<path::Path>>(path: P) -> Vec<i32> {
     return fs::read_to_string(path)
         .expect("could not read input")
         .trim_end_matches("\n")
